@@ -17,7 +17,7 @@ pipeline {
 			steps {
 				script {
 				    configFileProvider([configFile(fileId: 'pipeline-config', variable: 'repo')]) {
-                        println('repo: ' + $repo)
+                        println('repo: ' + repo)
                     }
 
 					println('-== Building image for ' + currentEnvironment + ' environment ==-')
