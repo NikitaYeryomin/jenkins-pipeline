@@ -21,7 +21,7 @@ pipeline {
                     sleep(5)
 				    configFileProvider([configFile(fileId: 'pipeline-config', variable: 'pipeline_config')]) {
                         println('reading: ' + pipeline_config)
-                        def config = new JsonSlurper().parse(new File(pipeline_config))
+                        def config = new groovy.json.JsonSlurper().parse(new File(pipeline_config))
                         println('docker_repo: ' + config.docker_repo)
 
                         commitHash = sh(returnStdout: true, script: "git rev-parse HEAD")
