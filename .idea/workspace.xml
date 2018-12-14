@@ -24,8 +24,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Jenkinsfile.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="21" column="27" lean-forward="true" selection-start-line="21" selection-start-column="27" selection-end-line="21" selection-end-column="27" />
+            <state relative-caret-position="464">
+              <caret line="61" column="118" selection-start-line="61" selection-start-column="118" selection-end-line="61" selection-end-column="118" />
               <folding>
                 <element signature="e#0#46#0" expanded="true" />
               </folding>
@@ -36,6 +36,7 @@
     </leaf>
   </component>
   <component name="Git.Settings">
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
@@ -46,9 +47,9 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="260" />
-    <option name="y" value="20" />
-    <option name="width" value="1400" />
+    <option name="x" value="-100" />
+    <option name="y" value="180" />
+    <option name="width" value="1631" />
     <option name="height" value="1000" />
   </component>
   <component name="ProjectView">
@@ -74,6 +75,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="C:/Program Files/Git/bin/git.exe" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
@@ -100,16 +102,15 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1544792268704</updated>
-      <workItem from="1544792273177" duration="1209000" />
+      <workItem from="1544792273177" duration="3345000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1209000" />
+    <option name="totallyTimeSpent" value="3345000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Image Layers" />
       <window_info id="Designer" />
@@ -153,8 +154,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Jenkinsfile.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="21" column="27" lean-forward="true" selection-start-line="21" selection-start-column="27" selection-end-line="21" selection-end-column="27" />
+        <state relative-caret-position="464">
+          <caret line="61" column="118" selection-start-line="61" selection-start-column="118" selection-end-line="61" selection-end-column="118" />
           <folding>
             <element signature="e#0#46#0" expanded="true" />
           </folding>

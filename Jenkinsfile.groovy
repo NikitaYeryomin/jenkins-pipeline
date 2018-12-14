@@ -19,6 +19,7 @@ pipeline {
 					println('-== Building image for ' + currentEnvironment + ' environment ==-')
 					//sleep in seconds
 					sleep(5)
+					commitHash = sh(returnStdout: true, script: "git rev-parse HEAD")
 					if ( currentEnvironment == 'QA' ) {
 						// global jenkins vars
 						sh 'env'
@@ -26,7 +27,6 @@ pipeline {
 						def environment = env.ENVIRONMENT
 						// meta vars
 						version = 1.0
-						commitHash = sh(returnStdout: true, script: "git rev-parse HEAD")
 						buildExecutor = new DockerExecutor(this, [
 								repo                 : "ae/infra/jenkins/agent/linux",
 								image                : "257540276112.dkr.ecr.us-east-1.amazonaws.com/nikita-test:${commitHash}",
@@ -38,10 +38,8 @@ pipeline {
 								]
 						])
 					} else if ( currentEnvironment == 'PROD' ) {
-						// Create an Artifactory server instance, as described above in this article:
-						def server = Artifactory.server 'my-server-id'
-						// If the docker daemon host is not specified, "/var/run/dokcer.sock" is used as a default value:
-						def rtDocker = Artifactory.docker server: server
+						def server = Artifactory.server 'artifactorymaster'
+						def rtDocker = Artifactory.docker username:'jenkinsapp2', password:'25f4s2s67Op7', server: server
 					}
 				}
 			}
@@ -49,11 +47,8 @@ pipeline {
 		stage("Initialize") {
 			steps {
 				script {
-					if ( currentEnvironment == 'QA' ) {
+					if (currentEnvironment == 'QA') {
 						buildExecutor.init("docker")
-					} else if ( currentEnvironment == 'PROD' ) {
-						// Attach custom properties to the published artifacts:
-						rtDocker.addProperty("project-name", "docker1").addProperty("status", "stable")
 					}
 				}
 			}
@@ -61,8 +56,10 @@ pipeline {
 		stage("Build") {
 			steps {
 				script {
-					if ( currentEnvironment == 'QA' ) {
+					if (currentEnvironment == 'QA') {
 						buildExecutor.execute()
+					} else if (currentEnvironment == 'PROD') {
+						sh "docker build -t artifactory.aesansun.com/dockervirtualappcicdl/elytestappl:${commitHash} ."
 					}
 				}
 			}
@@ -73,12 +70,8 @@ pipeline {
 					if ( currentEnvironment == 'QA' ) {
 						buildExecutor.push()
 					} else if ( currentEnvironment == 'PROD' ) {
-						// Push a docker image to Artifactory (here we're pushing hello-world:latest). The push method also expects
-						// Artifactory repository name (<target-artifactory-repository>).
-						// Please make sure that <artifactoryDockerRegistry> is configured to reference the <target-artifactory-repository> Artifactory repository. In case it references a different repository, your build will fail with "Could not find manifest.json in Artifactory..." following the push.
-						def buildInfo = rtDocker.push '<artifactory-docker-registry-url>/hello-world:latest', '<target-artifactory-repository>'
-						// Publish the build-info to Artifactory:
-						server.publishBuildInfo buildInfo
+						println("Pushing Docker image to the Artifactory server")
+						buildInfo = rtDocker.push("artifactory.aesansun.com/dockervirtualappcicdl/elytestappl:${commitHash}",'docker-local')
 					}
 				}
 			}
