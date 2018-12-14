@@ -33,7 +33,7 @@ pipeline {
                             // meta vars
                             version = 1.0
                             buildExecutor = new DockerExecutor(this, [
-                                    repo                 : "${docker_repo}",
+                                    repo                 : "${config.docker_repo}",
                                     image                : "257540276112.dkr.ecr.us-east-1.amazonaws.com/nikita-test:${commitHash}",
                                     region               : "us-east-1",
                                     registryAuthenticator: new AwsECRAuthenticator(this, "us-east-1"),
