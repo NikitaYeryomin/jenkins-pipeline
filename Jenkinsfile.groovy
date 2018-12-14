@@ -21,8 +21,8 @@ pipeline {
                     sleep(5)
 				    configFileProvider([configFile(fileId: 'pipeline-config', variable: 'pipeline_config')]) {
                         println('reading: ' + pipeline_config)
-                        def config = new groovy.json.JsonSlurper().parse(new File(pipeline_config))
-                        println('docker_repo: ' + config.docker_repo)
+                        def config = readJSON file: pipeline_config
+                        println('docker_repo: ' + config['docker_repo'])
 
                         commitHash = sh(returnStdout: true, script: "git rev-parse HEAD")
                         if ( currentEnvironment == 'QA' ) {
@@ -33,7 +33,7 @@ pipeline {
                             // meta vars
                             version = 1.0
                             buildExecutor = new DockerExecutor(this, [
-                                    repo                 : "${config.docker_repo}",
+                                    repo                 : "${config['docker_repo']}",
                                     image                : "257540276112.dkr.ecr.us-east-1.amazonaws.com/nikita-test:${commitHash}",
                                     region               : "us-east-1",
                                     registryAuthenticator: new AwsECRAuthenticator(this, "us-east-1"),
