@@ -16,6 +16,8 @@ pipeline {
 		stage("Init") {
 			steps {
 				script {
+					println('-== Building image for ' + currentEnvironment + ' environment ==-')
+					sleep(5000)
 					if ( currentEnvironment == 'QA' ) {
 						// global jenkins vars
 						sh 'env'
