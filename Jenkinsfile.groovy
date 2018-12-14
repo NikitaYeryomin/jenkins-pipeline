@@ -19,8 +19,8 @@ pipeline {
 				    println('-== Building image for ' + currentEnvironment + ' environment ==-')
                     //sleep in seconds
                     sleep(5)
-				    configFileProvider([configFile(fileId: 'pipeline-config', variable: 'repo')]) {
-
+				    configFileProvider([configFile(fileId: 'pipeline-config', variable: 'docker_repo')]) {
+                        println('docker_repo: ' + docker_repo)
 
                         commitHash = sh(returnStdout: true, script: "git rev-parse HEAD")
                         if ( currentEnvironment == 'QA' ) {
@@ -31,7 +31,7 @@ pipeline {
                             // meta vars
                             version = 1.0
                             buildExecutor = new DockerExecutor(this, [
-                                    repo                 : "${repo}",
+                                    repo                 : "${docker_repo}",
                                     image                : "257540276112.dkr.ecr.us-east-1.amazonaws.com/nikita-test:${commitHash}",
                                     region               : "us-east-1",
                                     registryAuthenticator: new AwsECRAuthenticator(this, "us-east-1"),
