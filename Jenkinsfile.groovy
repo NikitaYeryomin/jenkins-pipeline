@@ -20,9 +20,11 @@ pipeline {
                     //sleep in seconds
                     sleep(5)
 				    configFileProvider([configFile(fileId: 'pipeline-config', variable: 'pipeline_config')]) {
-                        println('reading: ' + pipeline_config)
+                        println('reading pipeline-config: ' + pipeline_config)
                         def config = readJSON file: pipeline_config
                         println('docker_repo: ' + config['docker_repo'])
+                        println('docker_image: ' + config['docker_image'])
+                        println('aws_region: ' + config['aws_region'])
 
                         commitHash = sh(returnStdout: true, script: "git rev-parse HEAD")
                         if ( currentEnvironment == 'QA' ) {
@@ -34,9 +36,9 @@ pipeline {
                             version = 1.0
                             buildExecutor = new DockerExecutor(this, [
                                     repo                 : "${config['docker_repo']}",
-                                    image                : "257540276112.dkr.ecr.us-east-1.amazonaws.com/nikita-test:${commitHash}",
-                                    region               : "us-east-1",
-                                    registryAuthenticator: new AwsECRAuthenticator(this, "us-east-1"),
+                                    image                : "${config['docker_image']}:${commitHash}",
+                                    region               : "${config['aws_region']}",
+                                    registryAuthenticator: new AwsECRAuthenticator(this, "${config['aws_region']}"),
                                     buildArgs            : [
                                             BUILD_NUMBER: "${env.JOB_NAME}#${env.BUILD_NUMBER}",
                                             COMMIT_HASH : commitHash

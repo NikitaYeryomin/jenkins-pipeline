@@ -1,4 +1,6 @@
 {
-  "environment": "prod",
-  "repo": "ae/infra/jenkins/agent/linux"
+  "environment": "DEV",
+  "docker_repo": "ae/infra/jenkins/agent/linux",
+  "docker_image": "257540276112.dkr.ecr.us-east-1.amazonaws.com/nikita-test",
+  "aws_region": "us-east-1"
 }
