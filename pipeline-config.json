@@ -2,5 +2,8 @@
   "environment": "DEV",
   "docker_repo": "ae/infra/jenkins/agent/linux",
   "docker_image": "257540276112.dkr.ecr.us-east-1.amazonaws.com/nikita-test",
-  "aws_region": "us-east-1"
+  "aws_region": "us-east-1",
+
+  "artifactory_server": "artifactorymaster",
+  "artifactory_image": "artifactory.aesansun.com/dockervirtualappcicdl/elytestappl"
 }

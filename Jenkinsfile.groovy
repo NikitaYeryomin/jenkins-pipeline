@@ -19,7 +19,6 @@ pipeline {
             }
 			steps {
 				script {
-				    println('artifactory user: ' + ARTIFACTORY_CREDS_USR)
 				    println('-== Building image for ' + currentEnvironment + ' environment ==-')
                     //sleep in seconds
                     sleep(5)
@@ -49,7 +48,8 @@ pipeline {
                                     ]
                             ])
                         } else if ( currentEnvironment == 'PROD' ) {
-                            def server = Artifactory.server 'artifactorymaster'
+                            println('Artifactory server: ' + config['artifactory_server'])
+                            def server = Artifactory.server config['artifactory_server']
                             def rtDocker = Artifactory.docker username:ARTIFACTORY_CREDS_USR, password:ARTIFACTORY_CREDS_PSW, server: server
                         }
 					}
@@ -71,7 +71,8 @@ pipeline {
 					if (currentEnvironment == 'QA') {
 						buildExecutor.execute()
 					} else if (currentEnvironment == 'PROD') {
-						sh "docker build -t artifactory.aesansun.com/dockervirtualappcicdl/elytestappl:${commitHash} ."
+					    println('Artifactory image: ' + config['artifactory_image'])
+						sh "docker build -t ${config['artifactory_image']}:${commitHash} ."
 					}
 				}
 			}
@@ -83,7 +84,7 @@ pipeline {
 						buildExecutor.push()
 					} else if ( currentEnvironment == 'PROD' ) {
 						println("Pushing Docker image to the Artifactory server")
-						buildInfo = rtDocker.push("artifactory.aesansun.com/dockervirtualappcicdl/elytestappl:${commitHash}",'docker-local')
+						buildInfo = rtDocker.push("${config['artifactory_image']}:${commitHash}",'docker-local')
 					}
 				}
 			}
