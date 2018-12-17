@@ -25,9 +25,14 @@ pipeline {
 				    configFileProvider([configFile(fileId: 'pipeline-config', variable: 'pipeline_config')]) {
                         println('reading pipeline-config: ' + pipeline_config)
                         def config = readJSON file: pipeline_config
-                        println('docker_repo: ' + config['docker_repo'])
-                        println('docker_image: ' + config['docker_image'])
-                        println('aws_region: ' + config['aws_region'])
+                        if ( currentEnvironment == 'QA' ) {
+                            println('docker_repo: ' + config['docker_repo'])
+                            println('docker_image: ' + config['docker_image'])
+                            println('aws_region: ' + config['aws_region'])
+                        } else if ( currentEnvironment == 'PROD' ) {
+                            println('Artifactory server: ' + config['artifactory_server'])
+                            println('Artifactory image: ' + config['artifactory_image'])
+                        }
 
                         commitHash = sh(returnStdout: true, script: "git rev-parse HEAD")
                         if ( currentEnvironment == 'QA' ) {
@@ -48,7 +53,6 @@ pipeline {
                                     ]
                             ])
                         } else if ( currentEnvironment == 'PROD' ) {
-                            println('Artifactory server: ' + config['artifactory_server'])
                             def server = Artifactory.server config['artifactory_server']
                             def rtDocker = Artifactory.docker username:ARTIFACTORY_CREDS_USR, password:ARTIFACTORY_CREDS_PSW, server: server
                         }
@@ -71,7 +75,6 @@ pipeline {
 					if (currentEnvironment == 'QA') {
 						buildExecutor.execute()
 					} else if (currentEnvironment == 'PROD') {
-					    println('Artifactory image: ' + config['artifactory_image'])
 						sh "docker build -t ${config['artifactory_image']}:${commitHash} ."
 					}
 				}
