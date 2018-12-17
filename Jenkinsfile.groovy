@@ -25,7 +25,7 @@ pipeline {
 				    configFileProvider([configFile(fileId: 'pipeline-config', variable: 'pipeline_config')]) {
                         println('reading pipeline-config: ' + pipeline_config)
                         def config = readJSON file: pipeline_config
-                        if ( currentEnvironment == 'QA' ) {
+                        if ( currentEnvironment == 'DEV' ) {
                             println('docker_repo: ' + config['docker_repo'])
                             println('docker_image: ' + config['docker_image'])
                             println('aws_region: ' + config['aws_region'])
@@ -35,7 +35,7 @@ pipeline {
                         }
 
                         commitHash = sh(returnStdout: true, script: "git rev-parse HEAD")
-                        if ( currentEnvironment == 'QA' ) {
+                        if ( currentEnvironment == 'DEV' ) {
                             // global jenkins vars
                             sh 'env'
                             def branch = env.BRANCH_NAME
@@ -63,7 +63,7 @@ pipeline {
 		stage("Initialize") {
 			steps {
 				script {
-					if (currentEnvironment == 'QA') {
+					if (currentEnvironment == 'DEV') {
 						buildExecutor.init("docker")
 					}
 				}
@@ -72,7 +72,7 @@ pipeline {
 		stage("Build") {
 			steps {
 				script {
-					if (currentEnvironment == 'QA') {
+					if (currentEnvironment == 'DEV') {
 						buildExecutor.execute()
 					} else if (currentEnvironment == 'PROD') {
 						sh "docker build -t ${config['artifactory_image']}:${commitHash} ."
@@ -83,7 +83,7 @@ pipeline {
 		stage("Publish") {
 			steps {
 				script {
-					if ( currentEnvironment == 'QA' ) {
+					if ( currentEnvironment == 'DEV' ) {
 						buildExecutor.push()
 					} else if ( currentEnvironment == 'PROD' ) {
 						println("Pushing Docker image to the Artifactory server")
