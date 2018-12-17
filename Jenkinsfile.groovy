@@ -14,8 +14,12 @@ pipeline {
 	}
 	stages {
 		stage("Init") {
+		    environment {
+                ARTIFACTORY_CREDS = credentials('jenkins-artifactory-creds')
+            }
 			steps {
 				script {
+				    println('artifactory user: ' + ARTIFACTORY_CREDS_USR)
 				    println('-== Building image for ' + currentEnvironment + ' environment ==-')
                     //sleep in seconds
                     sleep(5)
@@ -46,7 +50,7 @@ pipeline {
                             ])
                         } else if ( currentEnvironment == 'PROD' ) {
                             def server = Artifactory.server 'artifactorymaster'
-                            def rtDocker = Artifactory.docker username:'jenkinsapp2', password:'25f4s2s67Op7', server: server
+                            def rtDocker = Artifactory.docker username:ARTIFACTORY_CREDS_USR, password:ARTIFACTORY_CREDS_PSW, server: server
                         }
 					}
 				}
